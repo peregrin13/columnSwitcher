@@ -1,0 +1,24 @@
+/**
+ * This script picks up the columns indicated by whichColumns and pastes them onto the neededData tab.
+ * @return {array} requested columns
+ */
+
+function dataMover() {
+  var rawData = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('rawData');
+  var neededData = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('neededData');
+  
+  var neededColumns = whichColumns();
+  var swapRange;
+  var destRange;
+  var lastRow = rawData.getLastRow();
+  
+  Logger.log("Needed Columns = " + neededColumns);
+  
+  for (var i = 0; i < neededColumns.length ; i++){    
+
+    swapRange = rawData.getRange(3, neededColumns[i],lastRow).getValues();
+    Logger.log("swapRange = " + swapRange);
+    destRange = neededData.getRange(2,i+1,lastRow).setValues(swapRange);
+  }
+  
+}
