@@ -1,0 +1,47 @@
+/**
+ * This script iterates over the first two rows of the rawData sheet, and then returns the column numbers
+ * for the data that is needed on the reOrg sheet.
+
+ * The headers on the neededData sheet will be pulled in automatically, but you will need to manually adjust
+ * the first row on the rawData sheet so the script can find the info.
+ * 
+ * @return {array} column numbers
+ */
+
+function whichColumns(){
+  var rawData = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('rawData');
+  var neededData = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('neededData');
+  
+  var lastCol = rawData.getLastColumn();
+  var lastRow = rawData.getLastRow();
+  var ndlastCol = neededData.getLastColumn();
+  
+  var correctHeaders = rawData.getRange(1,1,1, lastCol).getValues(); //Internal names of columns, added by user to rawData
+  var neededHeaders = neededData.getRange(1,1,1,ndlastCol).getValues(); //Internal names of columns for generic upload, added by user to neededData
+  var neededColumns = [];
+
+  Logger.log("Correct Headers = " + correctHeaders);
+  Logger.log("Needed Headers = " + neededHeaders);
+  
+  var length = neededHeaders[0].length;
+  
+  //loops over the correctHeaders array
+  for (var i = 0; i < correctHeaders[0].length; i++){
+   
+    //finds array elements that are non-null
+    if (correctHeaders[0][i] !== ""){
+      for ( var j = 0; j < neededHeaders[0].length; j++){
+        //determines if the 0,i element of correctHeaders is a match for any of the neededHeaders
+        //if it is, it pushes the column number into neededColumns and drops that header from neededHeaders
+        if ( neededHeaders[0][j] == correctHeaders[0][i]){
+          
+          neededColumns.push(i+1);
+          
+        }
+      }
+    }
+  }
+  Logger.log(neededColumns);
+  return neededColumns;
+}
+
