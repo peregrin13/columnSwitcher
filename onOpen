@@ -1,0 +1,7 @@
+//Adds a menu option for the dataMover.
+
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('Processing Options')
+    .addItem('Line up Columns','dataMover')
+    .addToUi();
+  }
